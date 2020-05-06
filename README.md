@@ -8,3 +8,8 @@ This package contains a DNS provider module for [Caddy](https://github.com/caddy
 ```
 dns.providers.cloudflare
 ```
+
+
+## Authenticating
+
+See [the associated README in the libdns package](https://github.com/libdns/cloudflare) for important information about credentials.
