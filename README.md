@@ -17,13 +17,13 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 {
 	"module": "acme",
 	"challenges": {
-        "dns": {
-            "provider": {
-                "name": "cloudflare",
-                "api_token": "YOUR_CLOUDFLARE_API_TOKEN"
-            }
-        }
-    }
+		"dns": {
+			"provider": {
+				"name": "cloudflare",
+				"api_token": "YOUR_CLOUDFLARE_API_TOKEN"
+			}
+		}
+	}
 }
 ```
 
