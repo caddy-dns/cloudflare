@@ -41,3 +41,5 @@ You can replace `{env.CLOUDFLARE_API_TOKEN}` with the actual auth token if you p
 ## Authenticating
 
 See [the associated README in the libdns package](https://github.com/libdns/cloudflare) for important information about credentials.
+
+**NOTE**: If migrating from Caddy v1, you will need to change from using a Cloudflare API Key to a scoped API Token. Please see link above for more information.
