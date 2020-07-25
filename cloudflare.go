@@ -4,6 +4,7 @@ import (
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/libdns/cloudflare"
+	"os"
 )
 
 // Provider wraps the provider implementation as a Caddy module.
@@ -50,6 +51,9 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				return d.Errf("unrecognized subdirective '%s'", d.Val())
 			}
 		}
+	}
+	if p.Provider.APIToken == "" {
+		p.Provider.APIToken = repl.ReplaceAll(os.Getenv("CLOUDFLARE_API_TOKEN"), "")
 	}
 	if p.Provider.APIToken == "" {
 		return d.Err("missing API token")

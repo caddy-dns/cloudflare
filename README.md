@@ -37,6 +37,7 @@ tls {
 
 You can replace `{env.CLOUDFLARE_API_TOKEN}` with the actual auth token if you prefer to put it directly in your config instead of an environment variable.
 
+Alternatively you can simply set the environment variable `CLOUDFLARE_API_TOKEN`, which this package will pick up if there is no token in the Caddy config file. 
 
 ## Authenticating
 
