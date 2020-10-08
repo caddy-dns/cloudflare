@@ -11,6 +11,8 @@ dns.providers.cloudflare
 
 ## Config examples
 
+**Please note** this is not a global configuration directive, and must be declared per site. See [the docs](https://caddyserver.com/docs/caddyfile/concepts#snippets) if you have multiple sites
+
 To use this module for the ACME DNS challenge, [configure the ACME issuer in your Caddy JSON](https://caddyserver.com/docs/json/apps/tls/automation/policies/issuer/acme/) like so:
 
 ```
@@ -27,7 +29,7 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 }
 ```
 
-or with the Caddyfile (this is a per site configuration, not a global one):
+or with the Caddyfile:
 
 ```
 tls {
