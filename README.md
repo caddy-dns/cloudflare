@@ -27,7 +27,7 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 }
 ```
 
-or with the Caddyfile:
+or with the Caddyfile (this is a per site configuration, not a global one):
 
 ```
 tls {
