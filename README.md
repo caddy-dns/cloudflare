@@ -19,8 +19,8 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
   "challenges": {
     "dns": {
       "provider": {
-	"name": "cloudflare",
-	"api_token": "YOUR_CLOUDFLARE_API_TOKEN"
+        "name": "cloudflare",
+        "api_token": "YOUR_CLOUDFLARE_API_TOKEN"
       }
     }
   }
