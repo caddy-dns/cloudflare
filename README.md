@@ -31,7 +31,7 @@ or with the Caddyfile:
 
 ```
 tls {
- 	dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 }
 ```
 
