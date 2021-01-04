@@ -34,11 +34,11 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 //     api_token <api_token>
 // }
 //
+// Expansion of placeholders in the API token is left to the JSON config caddy.Provisioner (above).
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	repl := caddy.NewReplacer()
 	for d.Next() {
 		if d.NextArg() {
-			p.Provider.APIToken = repl.ReplaceAll(d.Val(), "")
+			p.Provider.APIToken = d.Val()
 		}
 		if d.NextArg() {
 			return d.ArgErr()
@@ -49,7 +49,7 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				if p.Provider.APIToken != "" {
 					return d.Err("API token already set")
 				}
-				p.Provider.APIToken = repl.ReplaceAll(d.Val(), "")
+				p.Provider.APIToken = d.Val()
 				if d.NextArg() {
 					return d.ArgErr()
 				}
