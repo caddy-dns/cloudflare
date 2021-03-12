@@ -20,7 +20,7 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 		"dns": {
 			"provider": {
 				"name": "cloudflare",
-				"api_token": "{env.CLOUDFLARE_API_TOKEN}"
+				"api_token": "{env.CF_API_TOKEN}"
 			}
 		}
 	}
@@ -31,11 +31,11 @@ or with the Caddyfile:
 
 ```
 tls {
-	dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	dns cloudflare {env.CF_API_TOKEN}
 }
 ```
 
-You can replace `{env.CLOUDFLARE_API_TOKEN}` with the actual auth token if you prefer to put it directly in your config instead of an environment variable.
+You can replace `{env.CF_API_TOKEN}` with the actual auth token if you prefer to put it directly in your config instead of an environment variable.
 
 
 ## Authenticating
