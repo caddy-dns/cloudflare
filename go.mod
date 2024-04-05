@@ -9,7 +9,7 @@ require (
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/caddyserver/certmagic v0.20.0 // indirect
+	github.com/caddyserver/certmagic v0.19.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
