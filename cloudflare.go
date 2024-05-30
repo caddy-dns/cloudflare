@@ -15,9 +15,9 @@
 package cloudflare
 
 import (
+	cloudflare "github.com/aliask/libdns-cloudflare"
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
-	"github.com/libdns/cloudflare"
 )
 
 // Provider wraps the provider implementation as a Caddy module.
@@ -44,8 +44,10 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 
 // UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Syntax:
 //
-//	cloudflare [<api_token>] {
-//	    api_token <api_token>
+//	cloudflare {
+//	    api_token <api_token> // or
+//	    dns_token <api_token>
+//	    zone_token <api_token>
 //	}
 //
 // Expansion of placeholders in the API token is left to the JSON config caddy.Provisioner (above).
@@ -67,13 +69,23 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				if d.NextArg() {
 					return d.ArgErr()
 				}
+			case "dns_token":
+				p.Provider.DNSToken = d.Val()
+				if d.NextArg() {
+					return d.ArgErr()
+				}
+			case "zone_token":
+				p.Provider.ZoneToken = d.Val()
+				if d.NextArg() {
+					return d.ArgErr()
+				}
 			default:
 				return d.Errf("unrecognized subdirective '%s'", d.Val())
 			}
 		}
 	}
-	if p.Provider.APIToken == "" {
-		return d.Err("missing API token")
+	if p.Provider.APIToken == "" || (p.Provider.DNSToken == "" && p.Provider.ZoneToken == "") {
+		return d.Err("missing API tokens")
 	}
 	return nil
 }
