@@ -35,48 +35,59 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 	}
 }
 
-// Before using the provider config, resolve placeholders in the API token.
+// Before using the provider config, resolve placeholders in the API token(s).
 // Implements caddy.Provisioner.
 func (p *Provider) Provision(ctx caddy.Context) error {
 	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
+	p.Provider.ZoneToken = caddy.NewReplacer().ReplaceAll(p.Provider.ZoneToken, "")
+	p.Provider.DNSToken = caddy.NewReplacer().ReplaceAll(p.Provider.DNSToken, "")
 	return nil
 }
 
-// UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Syntax:
+// UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Three syntaxes supported:
+//
+// Seperate Zone/DNS tokens
 //
 //	cloudflare {
-//	    api_token <api_token> // or
-//	    dns_token <api_token>
-//	    zone_token <api_token>
+//	  zone_token <zone_token>   // Zone read access - all zones
+//	  dns_token <dns_token>     // Zone DNS write access - scoped to applicable Zone(s)
+//	}
+//
+//	Single API Token
+//
+//	cloudflare <api_token>      // Zone read access and Zone DNS write for all zones
+//
+//	Single API Token, alternative syntax
+//
+//	cloudflare {
+//	  api_token <api_token>     // Zone read access and Zone DNS write for all zones
 //	}
 //
 // Expansion of placeholders in the API token is left to the JSON config caddy.Provisioner (above).
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	for d.Next() {
-		if d.NextArg() {
-			p.Provider.APIToken = d.Val()
-		}
-		if d.NextArg() {
-			return d.ArgErr()
-		}
+	d.Next() // consume directive name
+
+	if d.NextArg() {
+		p.Provider.APIToken = d.Val()
+	} else {
 		for nesting := d.Nesting(); d.NextBlock(nesting); {
 			switch d.Val() {
 			case "api_token":
-				if p.Provider.APIToken != "" {
-					return d.Err("API token already set")
-				}
-				p.Provider.APIToken = d.Val()
 				if d.NextArg() {
+					p.Provider.APIToken = d.Val()
+				} else {
 					return d.ArgErr()
 				}
 			case "dns_token":
-				p.Provider.DNSToken = d.Val()
 				if d.NextArg() {
+					p.Provider.DNSToken = d.Val()
+				} else {
 					return d.ArgErr()
 				}
 			case "zone_token":
-				p.Provider.ZoneToken = d.Val()
 				if d.NextArg() {
+					p.Provider.ZoneToken = d.Val()
+				} else {
 					return d.ArgErr()
 				}
 			default:
@@ -84,8 +95,20 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			}
 		}
 	}
-	if p.Provider.APIToken == "" || (p.Provider.DNSToken == "" && p.Provider.ZoneToken == "") {
-		return d.Err("missing API tokens")
+	if d.NextArg() {
+		return d.Errf("unexpected argument '%s'", d.Val())
+	}
+	if p.Provider.DNSToken != "" || p.Provider.ZoneToken != "" {
+		if p.Provider.ZoneToken == "" {
+			return d.Err("dns_token provided but no zone_token found")
+		}
+		if p.Provider.DNSToken == "" {
+			return d.Err("zone_token provided but no dns_token found")
+		}
+	} else {
+		if p.Provider.APIToken == "" {
+			return d.Err("missing API tokens")
+		}
 	}
 	return nil
 }
