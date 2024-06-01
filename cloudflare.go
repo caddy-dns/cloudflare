@@ -40,7 +40,6 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 func (p *Provider) Provision(ctx caddy.Context) error {
 	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
 	p.Provider.ZoneToken = caddy.NewReplacer().ReplaceAll(p.Provider.ZoneToken, "")
-	p.Provider.DNSToken = caddy.NewReplacer().ReplaceAll(p.Provider.DNSToken, "")
 	return nil
 }
 
@@ -49,8 +48,8 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 // Seperate Zone/DNS tokens
 //
 //	cloudflare {
+//	  api_token <api_token>     // Zone DNS write access - scoped to applicable Zone(s)
 //	  zone_token <zone_token>   // Zone read access - all zones
-//	  dns_token <dns_token>     // Zone DNS write access - scoped to applicable Zone(s)
 //	}
 //
 //	Single API Token
@@ -78,12 +77,6 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				} else {
 					return d.ArgErr()
 				}
-			case "dns_token":
-				if d.NextArg() {
-					p.Provider.DNSToken = d.Val()
-				} else {
-					return d.ArgErr()
-				}
 			case "zone_token":
 				if d.NextArg() {
 					p.Provider.ZoneToken = d.Val()
@@ -98,17 +91,8 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	if d.NextArg() {
 		return d.Errf("unexpected argument '%s'", d.Val())
 	}
-	if p.Provider.DNSToken != "" || p.Provider.ZoneToken != "" {
-		if p.Provider.ZoneToken == "" {
-			return d.Err("dns_token provided but no zone_token found")
-		}
-		if p.Provider.DNSToken == "" {
-			return d.Err("zone_token provided but no dns_token found")
-		}
-	} else {
-		if p.Provider.APIToken == "" {
-			return d.Err("missing API tokens")
-		}
+	if p.Provider.APIToken == "" {
+		return d.Err("missing API token")
 	}
 	return nil
 }

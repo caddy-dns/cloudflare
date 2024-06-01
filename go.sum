@@ -1,5 +1,5 @@
-github.com/aliask/libdns-cloudflare v0.0.0-20240530215425-8e17dd5e7d5f h1:gFxUFBdI34BhAUgLCjQ/rcQw7l++Fi+XDqseaMTOSeQ=
-github.com/aliask/libdns-cloudflare v0.0.0-20240530215425-8e17dd5e7d5f/go.mod h1:ja8JGK6PxlvvR4Aow1Mu5f6us1LOhARlisgpxNQFFfI=
+github.com/aliask/libdns-cloudflare v0.0.0-20240601015312-3ed679a9717f h1:adHcBfahob6mFMqVN6xHKVv/YLjaw8LJDXTtU0uihps=
+github.com/aliask/libdns-cloudflare v0.0.0-20240601015312-3ed679a9717f/go.mod h1:ja8JGK6PxlvvR4Aow1Mu5f6us1LOhARlisgpxNQFFfI=
 github.com/benbjohnson/clock v1.3.0 h1:ip6w0uFQkncKQ979AypyG0ER7mqUSBdKLOgAle/AT8A=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=

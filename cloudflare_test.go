@@ -62,23 +62,22 @@ func TestEmptyConfig(t *testing.T) {
 	err := p.UnmarshalCaddyfile(dispenser)
 	if err == nil {
 		t.Errorf(
-			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s, dns_token = %s",
+			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s",
 			p.Provider.APIToken,
 			p.Provider.ZoneToken,
-			p.Provider.DNSToken,
 		)
 	}
 }
 
-func TestZoneAndDNSTokens(t *testing.T) {
+func TestZoneAndAPITokens(t *testing.T) {
 	fmt.Println("Testing separated Zone and DNS tokens... ")
 	zone_token := "foo"
-	dns_token := "bar"
+	api_token := "bar"
 	config := fmt.Sprintf(`
 	cloudflare {
 		zone_token %s
-		dns_token %s
-	}`, zone_token, dns_token)
+		api_token %s
+	}`, zone_token, api_token)
 
 	dispenser := caddyfile.NewTestDispenser(config)
 	p := Provider{&cloudflare.Provider{}}
@@ -95,13 +94,7 @@ func TestZoneAndDNSTokens(t *testing.T) {
 		t.Errorf("Expected ZoneToken to be '%s' but got '%s'", expected, actual)
 	}
 
-	expected = dns_token
-	actual = p.Provider.DNSToken
-	if expected != actual {
-		t.Errorf("Expected DNSToken to be '%s' but got '%s'", expected, actual)
-	}
-
-	expected = ""
+	expected = api_token
 	actual = p.Provider.APIToken
 	if expected != actual {
 		t.Errorf("Expected APIToken to be '%s' but got '%s'", expected, actual)
@@ -110,12 +103,11 @@ func TestZoneAndDNSTokens(t *testing.T) {
 
 func TestPartialConfig(t *testing.T) {
 	fmt.Println("Testing partial config fails to parse... ")
-	dns_token := "bar"
+	zone_token := "bar"
 	config := fmt.Sprintf(`
 	cloudflare {
-		zone_token
-		dns_token %s
-	}`, dns_token)
+		zone_token %s
+	}`, zone_token)
 
 	dispenser := caddyfile.NewTestDispenser(config)
 	p := Provider{&cloudflare.Provider{}}
@@ -123,10 +115,9 @@ func TestPartialConfig(t *testing.T) {
 	err := p.UnmarshalCaddyfile(dispenser)
 	if err == nil {
 		t.Errorf(
-			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s, dns_token = %s",
+			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s",
 			p.Provider.APIToken,
 			p.Provider.ZoneToken,
-			p.Provider.DNSToken,
 		)
 	}
 }
@@ -142,10 +133,9 @@ func TestTooManyArgs(t *testing.T) {
 	err := p.UnmarshalCaddyfile(dispenser)
 	if err == nil {
 		t.Errorf(
-			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s, dns_token = %s",
+			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s",
 			p.Provider.APIToken,
 			p.Provider.ZoneToken,
-			p.Provider.DNSToken,
 		)
 	}
 }

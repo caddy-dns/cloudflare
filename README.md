@@ -50,7 +50,7 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 tls {
 	dns cloudflare {
 		zone_token {env.CF_ZONE_TOKEN}
-		dns_token {env.CF_DNS_TOKEN}
+		api_token {env.CF_API_TOKEN}
 	}
 }
 ```
