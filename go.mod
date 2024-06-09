@@ -1,10 +1,10 @@
-module github.com/aliask/caddy-cloudflare
+module github.com/caddy-dns/cloudflare
 
 go 1.20
 
 require (
-	github.com/aliask/libdns-cloudflare v0.0.0-20240601015312-3ed679a9717f
 	github.com/caddyserver/caddy/v2 v2.7.5
+	github.com/libdns/cloudflare v0.0.0-20240604123710-0549667a10ab
 )
 
 require (

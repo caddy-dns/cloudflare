@@ -46,7 +46,7 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 
 #### Dual-key approach
 
-```
+```Caddyfile
 tls {
 	dns cloudflare {
 		zone_token {env.CF_ZONE_TOKEN}
@@ -57,7 +57,7 @@ tls {
 
 #### Single-key approach
 
-```
+```Caddyfile
 tls {
 	dns cloudflare {env.CF_API_TOKEN}
 }

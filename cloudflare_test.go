@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	cloudflare "github.com/aliask/libdns-cloudflare"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
+	"github.com/libdns/cloudflare"
 )
 
 func TestSingleArg(t *testing.T) {
