@@ -35,42 +35,61 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 	}
 }
 
-// Before using the provider config, resolve placeholders in the API token.
+// Before using the provider config, resolve placeholders in the API token(s).
 // Implements caddy.Provisioner.
 func (p *Provider) Provision(ctx caddy.Context) error {
 	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
+	p.Provider.ZoneToken = caddy.NewReplacer().ReplaceAll(p.Provider.ZoneToken, "")
 	return nil
 }
 
-// UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Syntax:
+// UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Three syntaxes supported:
 //
-//	cloudflare [<api_token>] {
-//	    api_token <api_token>
+// Seperate Zone/DNS tokens
+//
+//	cloudflare {
+//	  api_token <api_token>     // Zone DNS write access - scoped to applicable Zone(s)
+//	  zone_token <zone_token>   // Zone read access - all zones
+//	}
+//
+//	Single API Token
+//
+//	cloudflare <api_token>      // Zone read access and Zone DNS write for all zones
+//
+//	Single API Token, alternative syntax
+//
+//	cloudflare {
+//	  api_token <api_token>     // Zone read access and Zone DNS write for all zones
 //	}
 //
 // Expansion of placeholders in the API token is left to the JSON config caddy.Provisioner (above).
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	for d.Next() {
-		if d.NextArg() {
-			p.Provider.APIToken = d.Val()
-		}
-		if d.NextArg() {
-			return d.ArgErr()
-		}
+	d.Next() // consume directive name
+
+	if d.NextArg() {
+		p.Provider.APIToken = d.Val()
+	} else {
 		for nesting := d.Nesting(); d.NextBlock(nesting); {
 			switch d.Val() {
 			case "api_token":
-				if p.Provider.APIToken != "" {
-					return d.Err("API token already set")
-				}
-				p.Provider.APIToken = d.Val()
 				if d.NextArg() {
+					p.Provider.APIToken = d.Val()
+				} else {
+					return d.ArgErr()
+				}
+			case "zone_token":
+				if d.NextArg() {
+					p.Provider.ZoneToken = d.Val()
+				} else {
 					return d.ArgErr()
 				}
 			default:
 				return d.Errf("unrecognized subdirective '%s'", d.Val())
 			}
 		}
+	}
+	if d.NextArg() {
+		return d.Errf("unexpected argument '%s'", d.Val())
 	}
 	if p.Provider.APIToken == "" {
 		return d.Err("missing API token")

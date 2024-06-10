@@ -9,7 +9,22 @@ This package contains a DNS provider module for [Caddy](https://github.com/caddy
 dns.providers.cloudflare
 ```
 
-## Config examples
+## Configuration
+
+This module gives the user two ways of configuring API tokens.
+
+1. Seperate Zone and DNS Tokens
+	- **Zone Token:** `Zone.Zone:Read` permission for `All zones`
+	- **DNS Token:** `Zone.DNS:Edit` permission for the domain you're managing with Caddy 
+2. Single API Token
+	- **API Token:** `Zone.Zone:Read` and `Zond.DNS:Edit` permissions for `All zones`
+
+If you host multiple DNS Zones (domains) in Cloudflare, strongly consider using option 1.
+
+Option 2 provides a simple way for users with a single domain. However, with this approach the key has permission to edit the DNS of **all** Zones in your account, so use this with care.
+
+
+### JSON Example
 
 To use this module for the ACME DNS challenge, [configure the ACME issuer in your Caddy JSON](https://caddyserver.com/docs/json/apps/tls/automation/policies/issuers/acme/) like so:
 
@@ -27,15 +42,28 @@ To use this module for the ACME DNS challenge, [configure the ACME issuer in you
 }
 ```
 
-or with the Caddyfile:
+### Caddyfile Examples
 
+#### Dual-key approach
+
+```Caddyfile
+tls {
+	dns cloudflare {
+		zone_token {env.CF_ZONE_TOKEN}
+		api_token {env.CF_API_TOKEN}
+	}
+}
 ```
+
+#### Single-key approach
+
+```Caddyfile
 tls {
 	dns cloudflare {env.CF_API_TOKEN}
 }
 ```
 
-You can replace `{env.CF_API_TOKEN}` with the actual auth token if you prefer to put it directly in your config instead of an environment variable.
+You can replace the `{env.CF_*}` placeholders with the actual auth token if you prefer to put it directly in your config instead of an environment variable, however it is less secure.
 
 
 ## Authenticating
