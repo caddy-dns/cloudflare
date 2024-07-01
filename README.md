@@ -17,7 +17,7 @@ This module gives the user two ways of configuring API tokens.
 	- **Zone Token:** `Zone.Zone:Read` permission for `All zones`
 	- **DNS Token:** `Zone.DNS:Edit` permission for the domain you're managing with Caddy 
 2. Single API Token
-	- **API Token:** `Zone.Zone:Read` and `Zond.DNS:Edit` permissions for `All zones`
+	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for `All zones`
 
 If you host multiple DNS Zones (domains) in Cloudflare, strongly consider using option 1.
 
