@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/caddyserver/caddy/v2 v2.7.5
-	github.com/libdns/cloudflare v0.1.3-0.20250228173341-243a3042012d
+	github.com/libdns/cloudflare v0.1.3
 )
 
 require (
