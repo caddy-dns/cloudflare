@@ -1,0 +1,48 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  go-build-and-test:
+    runs-on: ubuntu-latest
+    name: "Run go tests"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Build
+        run: go build -v
+
+      - name: Test
+        run: go test -v
+
+  test-build-with-xcaddy:
+    runs-on: ubuntu-latest
+    name: "Test the xcaddy build with the current version"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the test Docker image with latest caddy version and xcaddy
+        run: docker build . --file .github/test-xcaddy.Dockerfile --tag caddy-dns-cloudflare:$(date +%s)
