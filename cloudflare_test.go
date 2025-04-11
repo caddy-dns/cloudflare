@@ -139,3 +139,44 @@ func TestTooManyArgs(t *testing.T) {
 		)
 	}
 }
+
+func TestInvalidTokens(t *testing.T) {
+	badTokens := []string{
+		"",
+		" ",
+		"{env.VAR}",
+		`"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU"`,
+		"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU-extra-characters-that-are-way-too-long",
+		"abcdef",
+	}
+
+	for _, badToken := range badTokens {
+		config := fmt.Sprintf(`cloudflare %s`, badToken)
+		dispenser := caddyfile.NewTestDispenser(config)
+		p := Provider{&cloudflare.Provider{}}
+
+		err := p.UnmarshalCaddyfile(dispenser)
+		if err == nil {
+			t.Errorf(
+				"Expected token '%s' to fail validation, but it was accepted",
+				badToken,
+			)
+		}
+	}
+}
+
+func TestValidToken(t *testing.T) {
+	goodToken := "Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU"
+	config := fmt.Sprintf(`cloudflare %s`, goodToken)
+	dispenser := caddyfile.NewTestDispenser(config)
+	p := Provider{&cloudflare.Provider{}}
+
+	err := p.UnmarshalCaddyfile(dispenser)
+	if err != nil {
+		t.Errorf(
+			"Expected valid token '%s', but validation failed: %v",
+			goodToken,
+			err,
+		)
+	}
+}
