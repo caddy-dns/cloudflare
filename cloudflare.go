@@ -15,10 +15,12 @@
 package cloudflare
 
 import (
+	"fmt"
+	"regexp"
+
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/libdns/cloudflare"
-	"regexp"
 )
 
 // cloudflareTokenRegexp matches Cloudflare tokens consisting of 35 to 50 alphanumeric characters, dashes, or underscores.
@@ -44,6 +46,9 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 func (p *Provider) Provision(ctx caddy.Context) error {
 	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
 	p.Provider.ZoneToken = caddy.NewReplacer().ReplaceAll(p.Provider.ZoneToken, "")
+	if !validCloudflareToken(p.Provider.APIToken) {
+		return fmt.Errorf("API token '%s' appears invalid; ensure it's correctly entered and not wrapped in braces nor quotes", p.Provider.APIToken)
+	}
 	return nil
 }
 
@@ -102,9 +107,6 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	}
 	if p.Provider.APIToken == "" {
 		return d.Err("missing API token")
-	}
-	if !validCloudflareToken(p.Provider.APIToken) {
-		return d.Errf("API token '%s' appears invalid; ensure it's correctly entered and not wrapped in braces nor quotes", p.Provider.APIToken)
 	}
 	return nil
 }

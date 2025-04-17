@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/libdns/cloudflare"
 )
@@ -151,14 +152,10 @@ func TestInvalidTokens(t *testing.T) {
 	}
 
 	for _, badToken := range badTokens {
-		config := fmt.Sprintf(`cloudflare %s`, badToken)
-		dispenser := caddyfile.NewTestDispenser(config)
-		p := Provider{&cloudflare.Provider{}}
-
-		err := p.UnmarshalCaddyfile(dispenser)
-		if err == nil {
+		p := Provider{&cloudflare.Provider{APIToken: badToken}}
+		if err := p.Provision(caddy.Context{}); err == nil {
 			t.Errorf(
-				"Expected token '%s' to fail validation, but it was accepted",
+				"Expected token '%s' to fail provisioning, but it was accepted",
 				badToken,
 			)
 		}
