@@ -6,7 +6,7 @@ toolchain go1.24.2
 
 require (
 	github.com/caddyserver/caddy/v2 v2.7.5
-	github.com/libdns/cloudflare v0.2.0
+	github.com/libdns/cloudflare v0.2.1
 )
 
 require (
