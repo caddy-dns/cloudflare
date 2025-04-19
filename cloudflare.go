@@ -15,10 +15,16 @@
 package cloudflare
 
 import (
+	"fmt"
+	"regexp"
+
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/libdns/cloudflare"
 )
+
+// cloudflareTokenRegexp matches Cloudflare tokens consisting of 35 to 50 alphanumeric characters, dashes, or underscores.
+var cloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,50}$`)
 
 // Provider wraps the provider implementation as a Caddy module.
 type Provider struct{ *cloudflare.Provider }
@@ -40,7 +46,15 @@ func (Provider) CaddyModule() caddy.ModuleInfo {
 func (p *Provider) Provision(ctx caddy.Context) error {
 	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
 	p.Provider.ZoneToken = caddy.NewReplacer().ReplaceAll(p.Provider.ZoneToken, "")
+	if !validCloudflareToken(p.Provider.APIToken) {
+		return fmt.Errorf("API token '%s' appears invalid; ensure it's correctly entered and not wrapped in braces nor quotes", p.Provider.APIToken)
+	}
 	return nil
+}
+
+// validCloudflareToken validates if the provided token matches the expected Cloudflare token format using a regular expression.
+func validCloudflareToken(token string) bool {
+	return cloudflareTokenRegexp.MatchString(token)
 }
 
 // UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Three syntaxes supported:

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/libdns/cloudflare"
 )
@@ -136,6 +137,43 @@ func TestTooManyArgs(t *testing.T) {
 			"UnmarshalCaddyfile should have provided an error, but none was received. api_token = %s, zone_token = %s",
 			p.Provider.APIToken,
 			p.Provider.ZoneToken,
+		)
+	}
+}
+
+func TestInvalidTokens(t *testing.T) {
+	badTokens := []string{
+		"",
+		" ",
+		"{env.VAR}",
+		`"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU"`,
+		"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU-extra-characters-that-are-way-too-long",
+		"abcdef",
+	}
+
+	for _, badToken := range badTokens {
+		p := Provider{&cloudflare.Provider{APIToken: badToken}}
+		if err := p.Provision(caddy.Context{}); err == nil {
+			t.Errorf(
+				"Expected token '%s' to fail provisioning, but it was accepted",
+				badToken,
+			)
+		}
+	}
+}
+
+func TestValidToken(t *testing.T) {
+	goodToken := "Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU"
+	config := fmt.Sprintf(`cloudflare %s`, goodToken)
+	dispenser := caddyfile.NewTestDispenser(config)
+	p := Provider{&cloudflare.Provider{}}
+
+	err := p.UnmarshalCaddyfile(dispenser)
+	if err != nil {
+		t.Errorf(
+			"Expected valid token '%s', but validation failed: %v",
+			goodToken,
+			err,
 		)
 	}
 }
