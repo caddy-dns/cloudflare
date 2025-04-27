@@ -13,14 +13,13 @@ dns.providers.cloudflare
 
 This module gives the user two ways of configuring API tokens.
 
-1. Seperate Zone and DNS Tokens (Legacy)
+1. Seperate Zone and DNS Tokens (Deprecated)
 	- **Zone Token:** `Zone.Zone:Read` permission for the domain(s) you're managing with Caddy
 	- **DNS Token:** `Zone.DNS:Edit` permission for the domain(s) you're managing with Caddy 
 2. Single API Token (Recommended)
 	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for permission for the domain(s) you're managing with Caddy 
 
-Note: Legacy separate tokens is only there for backwards compatibilty and might be removed in a future version of this module.
-
+**Note:** Deprecated separate tokens support is only there for backwards compatibilty and might be removed in a future version of this module.
 
 ### JSON Example
 
