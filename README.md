@@ -77,7 +77,7 @@ If providing your API token via an ENV var which is accidentally not set/availab
 
 Double check that Caddy has access to a valid CF API token.
 
-### Error: `timed out waiting for the record to fully propagate`
+### Error: `timed out waiting for record to fully propagate`
 
 Some environments may have trouble querying the `_acme-challenge` TXT record from Cloudflare. Verify in the Cloudflare dashboard that the temporary record is being created.
 
