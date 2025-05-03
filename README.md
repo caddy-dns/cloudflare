@@ -13,13 +13,13 @@ dns.providers.cloudflare
 
 This module gives the user two ways of configuring API tokens.
 
-1. Seperate Zone and DNS Tokens (Deprecated)
+1. Separate Zone and DNS Tokens (Deprecated)
 	- **Zone Token:** `Zone.Zone:Read` permission for the domain(s) you're managing with Caddy
 	- **DNS Token:** `Zone.DNS:Edit` permission for the domain(s) you're managing with Caddy 
 2. Single API Token (Recommended)
 	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for permission for the domain(s) you're managing with Caddy 
 
-**Note:** Deprecated separate tokens support is only there for backwards compatibilty and might be removed in a future version of this module.
+**Note:** Deprecated separate tokens support is only there for backward compatibility and might be removed in a future version of this module.
 
 ### JSON Example
 
@@ -77,11 +77,11 @@ If providing your API token via an ENV var which is accidentally not set/availab
 
 Double check that Caddy has access to a valid CF API token.
 
-### Error: `timed out waiting for record to fully propagate`
+### Error: `timed out waiting for the record to fully propagate`
 
 Some environments may have trouble querying the `_acme-challenge` TXT record from Cloudflare. Verify in the Cloudflare dashboard that the temporary record is being created.
 
-If the record does exist, your DNS resolver may be caching an earlier response before the record was valid. You can instead configure Caddy to use an alternative DNS resolver such as [Cloudflare's official `1.1.1.1`](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/).
+If the record does exist, your DNS resolver may be caching an earlier response before the record is valid. You can instead configure Caddy to use an alternative DNS resolver such as [Cloudflare's official `1.1.1.1`](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/).
 
 Add a custom `resolver` to the [`tls` directive](https://caddyserver.com/docs/caddyfile/directives/tls):
 
