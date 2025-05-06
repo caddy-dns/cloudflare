@@ -13,16 +13,13 @@ dns.providers.cloudflare
 
 This module gives the user two ways of configuring API tokens.
 
-1. Seperate Zone and DNS Tokens
-	- **Zone Token:** `Zone.Zone:Read` permission for `All zones`
-	- **DNS Token:** `Zone.DNS:Edit` permission for the domain you're managing with Caddy 
-2. Single API Token
-	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for `All zones`
+1. Separate Zone and DNS Tokens (Deprecated)
+	- **Zone Token:** `Zone.Zone:Read` permission for the domain(s) you're managing with Caddy
+	- **DNS Token:** `Zone.DNS:Edit` permission for the domain(s) you're managing with Caddy 
+2. Single API Token (Recommended)
+	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for permission for the domain(s) you're managing with Caddy 
 
-If you host multiple DNS Zones (domains) in Cloudflare, strongly consider using option 1.
-
-Option 2 provides a simple way for users with a single domain. However, with this approach the key has permission to edit the DNS of **all** Zones in your account, so use this with care.
-
+**Note:** Deprecated separate tokens support is only there for backward compatibility and might be removed in a future version of this module.
 
 ### JSON Example
 
@@ -84,7 +81,7 @@ Double check that Caddy has access to a valid CF API token.
 
 Some environments may have trouble querying the `_acme-challenge` TXT record from Cloudflare. Verify in the Cloudflare dashboard that the temporary record is being created.
 
-If the record does exist, your DNS resolver may be caching an earlier response before the record was valid. You can instead configure Caddy to use an alternative DNS resolver such as [Cloudflare's official `1.1.1.1`](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/).
+If the record does exist, your DNS resolver may be caching an earlier response before the record is valid. You can instead configure Caddy to use an alternative DNS resolver such as [Cloudflare's official `1.1.1.1`](https://www.cloudflare.com/en-gb/learning/dns/what-is-1.1.1.1/).
 
 Add a custom `resolver` to the [`tls` directive](https://caddyserver.com/docs/caddyfile/directives/tls):
 
