@@ -17,7 +17,7 @@ This module gives the user two ways of configuring API tokens.
 	- **Zone Token:** `Zone.Zone:Read` permission for the domain(s) you're managing with Caddy
 	- **DNS Token:** `Zone.DNS:Edit` permission for the domain(s) you're managing with Caddy 
 2. Single API Token (Recommended)
-	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for permission for the domain(s) you're managing with Caddy 
+	- **API Token:** `Zone.Zone:Read` and `Zone.DNS:Edit` permissions for the domain(s) you're managing with Caddy 
 
 **Note:** Deprecated separate tokens support is only there for backward compatibility and might be removed in a future version of this module.
 
