@@ -7,9 +7,12 @@ RUN go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest && \
     --output /usr/bin/caddy \
     --with "github.com/caddy-dns/cloudflare=."
 
-FROM alpine:3.22
+FROM alpine:latest
 
-RUN apk add --no-cache \
+# added zlib to address CVE-2026-22184
+RUN apk update && \
+    apk add --no-cache --upgrade \
+    zlib \
     ca-certificates \
     libcap \
     mailcap

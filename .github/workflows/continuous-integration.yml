@@ -1,19 +1,20 @@
 name: Continuous Integration
-
+permissions:
+  contents: read
 on:
-  schedule:
-    - cron: "0 7 * * *"
   push:
     branches:
       - main
       - master
     tags:
-      - '*'
+      - "*"
   pull_request:
     branches:
       - main
       - master
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   go-build-and-test:
     runs-on: ubuntu-latest
@@ -24,7 +25,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.2'
+          go-version: "1.26.1"
           check-latest: true
 
       - name: Cache Go modules
