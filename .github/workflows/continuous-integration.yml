@@ -82,7 +82,7 @@ jobs:
           fi
 
       - name: Build Docker image with xcaddy and optionally push to GHCR
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
