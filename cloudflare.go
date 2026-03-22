@@ -24,7 +24,7 @@ import (
 )
 
 // cloudflareTokenRegexp matches Cloudflare tokens consisting of 35 to 50 alphanumeric characters, dashes, or underscores.
-var cloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,50}$`)
+var cloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,}$`)
 
 // Provider wraps the provider implementation as a Caddy module.
 type Provider struct{ *cloudflare.Provider }
