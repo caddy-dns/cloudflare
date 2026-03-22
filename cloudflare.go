@@ -23,8 +23,8 @@ import (
 	"github.com/libdns/cloudflare"
 )
 
-// cloudflareTokenRegexp matches Cloudflare tokens consisting of 35 to 100 alphanumeric characters, dashes, or underscores.
-var cloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,100}$`)
+// cloudflareTokenRegexp matches Cloudflare tokens consisting of 35 to 70 alphanumeric characters, dashes, or underscores.
+var cloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,70}$`)
 
 // Provider wraps the provider implementation as a Caddy module.
 type Provider struct{ *cloudflare.Provider }
