@@ -1,6 +1,7 @@
 [![](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![CodeQL](https://github.com/caddy-dns/cloudflare/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/caddy-dns/cloudflare/actions/workflows/github-code-scanning/codeql)
 [![Go CI](https://github.com/caddy-dns/cloudflare/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/caddy-dns/cloudflare/actions/workflows/continuous-integration.yml)
+[![Dependabot Updates](https://github.com/butlergroup/caddy-dns-cloudflare/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/butlergroup/caddy-dns-cloudflare/actions/workflows/dependabot/dependabot-updates)
 [![Go Report Card](https://goreportcard.com/badge/github.com/caddy-dns/cloudflare)](https://goreportcard.com/report/github.com/caddy-dns/cloudflare)
 [![OSV-Scanner](https://github.com/caddy-dns/cloudflare/actions/workflows/osv-scanner.yml/badge.svg)](https://github.com/caddy-dns/cloudflare/actions/workflows/osv-scanner.yml)
 [![Scorecard supply-chain security](https://github.com/caddy-dns/cloudflare/actions/workflows/scorecard.yml/badge.svg)](https://github.com/caddy-dns/cloudflare/actions/workflows/scorecard.yml)
