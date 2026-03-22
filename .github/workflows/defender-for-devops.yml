@@ -39,7 +39,7 @@ jobs:
       # Needed to publish results and get a badge (see publish_results below).
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |

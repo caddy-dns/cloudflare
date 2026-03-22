@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Run go tests"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -54,7 +54,7 @@ jobs:
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Log in to GHCR (tags only)
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
