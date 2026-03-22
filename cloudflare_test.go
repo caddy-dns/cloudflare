@@ -163,17 +163,23 @@ func TestInvalidTokens(t *testing.T) {
 }
 
 func TestValidToken(t *testing.T) {
-	goodToken := "Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU"
-	config := fmt.Sprintf(`cloudflare %s`, goodToken)
-	dispenser := caddyfile.NewTestDispenser(config)
-	p := Provider{&cloudflare.Provider{}}
+	goodTokens := []string{
+		"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU",
+		"cfut_o05zJzvjuYIAytVYUGhzuGlGnuxbKDINWqnVk6mP560d0f24",
+	}
 
-	err := p.UnmarshalCaddyfile(dispenser)
-	if err != nil {
-		t.Errorf(
-			"Expected valid token '%s', but validation failed: %v",
-			goodToken,
-			err,
-		)
+	for _, goodToken := range goodTokens {
+		config := fmt.Sprintf(`cloudflare %s`, goodToken)
+		dispenser := caddyfile.NewTestDispenser(config)
+		p := Provider{&cloudflare.Provider{}}
+
+		err := p.UnmarshalCaddyfile(dispenser)
+		if err != nil {
+			t.Errorf(
+				"Expected valid token '%s', but validation failed: %v",
+				goodToken,
+				err,
+			)
+		}
 	}
 }
