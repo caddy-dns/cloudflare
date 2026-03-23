@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/caddyserver/caddy/v2"
@@ -149,6 +150,8 @@ func TestInvalidTokens(t *testing.T) {
 		`"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU"`,
 		"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU-extra-characters-that-are-way-too-long",
 		"abcdef",
+		// cfut_/cfat_ with suffix >256 (too long for new; too long for legacy)
+		"cfut_" + strings.Repeat("a", 257),
 	}
 
 	for _, badToken := range badTokens {
@@ -160,6 +163,39 @@ func TestInvalidTokens(t *testing.T) {
 			)
 		}
 	}
+}
+
+func TestValidCloudflareTokenFormats(t *testing.T) {
+	validAPITokens := []string{
+		// legacy
+		"Sqqty8-Vn0iOP29rvqYgwKz_xqGQ4y5JhuVL1-qU",
+		// user token (cfut_)
+		"cfut_6YNSv6zUiWehDxZfdh8vNf3orQJzA6rrcDFJhql65e203820",
+		// account token (cfat_)
+		"cfat_3Sak5MsJJAsXNHCEmRufjbkbrdcxrhZFofmAe1pN435b71a9",
+		// minimum-length new-format suffix (32 chars)
+		"cfut_12345678901234567890123456789012",
+		"cfat_12345678901234567890123456789012",
+		// same shape as cfut_/cfat_ but 35–50 chars total → accepted as legacy
+		"cfut_123456789012345678901234567890",
+		"cfxt_12345678901234567890123456789012",
+	}
+
+	for _, tok := range validAPITokens {
+		t.Run(tok[:min(12, len(tok))]+"...", func(t *testing.T) {
+			p := Provider{&cloudflare.Provider{APIToken: tok}}
+			if err := p.Provision(caddy.Context{}); err != nil {
+				t.Errorf("Provision: %v", err)
+			}
+		})
+	}
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func TestValidToken(t *testing.T) {
