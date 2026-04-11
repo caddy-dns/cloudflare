@@ -17,6 +17,7 @@ package cloudflare
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
@@ -50,9 +51,19 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 	p.Provider.APIToken = caddy.NewReplacer().ReplaceAll(p.Provider.APIToken, "")
 	p.Provider.ZoneToken = caddy.NewReplacer().ReplaceAll(p.Provider.ZoneToken, "")
 	if !validCloudflareToken(p.Provider.APIToken) {
-		return fmt.Errorf("API token '%s' appears invalid; ensure it's correctly entered and not wrapped in braces nor quotes", p.Provider.APIToken)
+		return fmt.Errorf("API token '%s' appears invalid; ensure it's correctly entered and not wrapped in braces nor quotes", redactToken(p.Provider.APIToken))
 	}
 	return nil
+}
+
+// redactToken returns a redacted version of the token, showing only the first 8
+// and last 4 characters with the middle replaced by asterisks. This prevents
+// accidental credential leakage in error messages and log output.
+func redactToken(token string) string {
+	if len(token) <= 12 {
+		return strings.Repeat("*", len(token))
+	}
+	return token[:8] + strings.Repeat("*", len(token)-12) + token[len(token)-4:]
 }
 
 // validCloudflareToken returns true for legacy API tokens (35–50 chars) or cfut_/cfat_ tokens.
