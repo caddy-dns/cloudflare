@@ -23,8 +23,8 @@ import (
 	"github.com/libdns/cloudflare"
 )
 
-// legacyCloudflareTokenRegexp matches classic API tokens: 35–50 alphanumeric, dash, or underscore.
-var legacyCloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,50}$`)
+// legacyCloudflareTokenRegexp matches classic API tokens: 35–70 alphanumeric, dash, or underscore.
+var legacyCloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,70}$`)
 
 // newCloudflareTokenRegexp matches user (cfut_) and account (cfat_) API token formats.
 var newCloudflareTokenRegexp = regexp.MustCompile(`^cf(ut|at)_[A-Za-z0-9_-]{32,256}$`)
@@ -55,7 +55,7 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 	return nil
 }
 
-// validCloudflareToken returns true for legacy API tokens (35–50 chars) or cfut_/cfat_ tokens.
+// validCloudflareToken returns true for legacy API tokens (35–70 chars) or cfut_/cfat_ tokens.
 func validCloudflareToken(token string) bool {
 	return newCloudflareTokenRegexp.MatchString(token) || legacyCloudflareTokenRegexp.MatchString(token)
 }
