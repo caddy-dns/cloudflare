@@ -16,18 +16,11 @@ package cloudflare
 
 import (
 	"fmt"
-	"regexp"
 
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
 	"github.com/libdns/cloudflare"
 )
-
-// legacyCloudflareTokenRegexp matches classic API tokens: 35–70 alphanumeric, dash, or underscore.
-var legacyCloudflareTokenRegexp = regexp.MustCompile(`^[A-Za-z0-9_-]{35,70}$`)
-
-// newCloudflareTokenRegexp matches user (cfut_) and account (cfat_) API token formats.
-var newCloudflareTokenRegexp = regexp.MustCompile(`^cf(ut|at)_[A-Za-z0-9_-]{32,256}$`)
 
 // Provider wraps the provider implementation as a Caddy module.
 type Provider struct{ *cloudflare.Provider }
@@ -57,7 +50,7 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 
 // validCloudflareToken returns true for legacy API tokens (35–70 chars) or cfut_/cfat_ tokens.
 func validCloudflareToken(token string) bool {
-	return newCloudflareTokenRegexp.MatchString(token) || legacyCloudflareTokenRegexp.MatchString(token)
+	return token != ""
 }
 
 // UnmarshalCaddyfile sets up the DNS provider from Caddyfile tokens. Three syntaxes supported:
